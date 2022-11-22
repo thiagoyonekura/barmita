@@ -1,0 +1,131 @@
+CREATE TABLE cliente (
+    cpf varchar(11) PRIMARY KEY NOT NULL,
+    nome varchar(50) NOT NULL,
+    telefone varchar(11) NOT NULL,
+    email varchar(60) NOT NULL,
+    dataNascimento date NOT NULL,
+    senha varchar(25) NOT NULL,
+    fk_cardapio_idCardapio integer
+);
+CREATE TABLE produto (
+    idProduto integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    descricao varchar(60) NOT NULL,
+    qtdProduto integer NOT NULL,
+    precoProduto float NOT NULL,
+    dataCadastro date NOT NULL,
+    situacao varchar(25) NOT NULL
+);
+
+CREATE TABLE cardapio (
+    idCardapio integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    descricao varchar(60) NOT NULL,
+    valor float NOT NULL,
+    categorias varchar(25) NOT NULL,
+    nomeItem varchar(25) NOT NULL,
+    adicional varchar(25),
+    situacaoOnOff varchar(25)
+);
+
+CREATE TABLE reserva (
+    idReserva integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    dataReserva date NOT NULL,
+    situacao varchar(25) DEFAULT 'Reserva confirmada',
+    qtdPessoa integer NOT NULL,
+    horario time NOT NULL,
+    ocasiao varchar(60),
+    fk_funcionario_cpf varchar(11),
+    fk_cliente_cpf varchar(11),
+    fk_mesa_idMesa integer
+);
+
+CREATE TABLE mesa (
+    idMesa integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    qtdCadeira integer NOT NULL,
+    qtdMesa integer NOT NULL,
+    localAmbiente varchar(25) NOT NULL,
+    situacao varchar(60) NOT NULL,
+    dataCadastro date NOT NULL
+);
+
+CREATE TABLE funcionario (
+    cpf varchar(11) PRIMARY KEY NOT NULL,
+    nome varchar(50) NOT NULL,
+    endereco varchar(100) NOT NULL,
+    telefone varchar(11) NOT NULL,
+    email varchar(60) NOT NULL,
+    genero varchar(25) NOT NULL,
+    dataNascimento date NOT NULL
+);
+CREATE TABLE senhas(
+    fk_cpf VARCHAR(11),
+    senhaAtual VARCHAR(50) NOT NULL,
+    dataAtual DATE,
+    senha1 VARCHAR(50),
+    data1 DATE,
+    senha2 VARCHAR(50),
+    data2 DATE,
+    senha3 VARCHAR(50),
+    data3 DATE,
+    tentativas INTEGER,
+    situacao INTEGER,
+    Foreign Key (fk_cpf) REFERENCES funcionario(cpf)
+    on delete CASCADE
+    on update CASCADE
+);
+
+CREATE TABLE possui (
+    fk_cardapio_idCardapio integer NOT NULL,
+    fk_produto_idProduto integer NOT NULL
+);
+ 
+ALTER TABLE cliente ADD CONSTRAINT FK_cliente_2
+    FOREIGN KEY (fk_cardapio_idCardapio)
+    REFERENCES cardapio (idCardapio)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE reserva ADD CONSTRAINT FK_reserva_2
+    FOREIGN KEY (fk_funcionario_cpf)
+    REFERENCES funcionario (cpf)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE reserva ADD CONSTRAINT FK_reserva_3
+    FOREIGN KEY (fk_cliente_cpf)
+    REFERENCES cliente (cpf)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE reserva ADD CONSTRAINT FK_reserva_4
+    FOREIGN KEY (fk_mesa_idMesa)
+    REFERENCES mesa (idMesa)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE possui ADD CONSTRAINT FK_possui_1
+    FOREIGN KEY (fk_cardapio_idCardapio)
+    REFERENCES cardapio (idCardapio)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE possui ADD CONSTRAINT FK_possui_2
+    FOREIGN KEY (fk_produto_idProduto)
+    REFERENCES produto (idProduto)
+    ON DELETE RESTRICT;
+
+
+SELECT `idCardapio`,descricao,valor,categorias,`nomeItem`,adicional,`situacaoOnOff` FROM cardapio;
+
+SELECT `idCardapio`,descricao,valor,categorias,`nomeItem`,adicional,`situacaoOnOff` FROM cardapio;
+UPDATE senhas SET situacao = 1 WHERE fk_cpf = '12345678900';
+UPDATE senhas SET ten WHERE fk_cpf = '12345678900';
+
+SELECT `idCardapio`,descricao,valor,categorias,`nomeItem`,adicional,`situacaoOnOff` FROM cardapio;
+
+INSERT INTO cardapio VALUES (1,'Chopp', 15, 'Alcoólicos','Chopp','' ,'Disponível');
+INSERT INTO cardapio VALUES (2,'Mojito', 15, 'Alcoólicos','Mojito','' ,'Disponível');
+INSERT INTO cardapio VALUES (3,'Whiskey', 20, 'Alcoólicos','Whiskey','' ,'Disponível');
+INSERT INTO cardapio VALUES (4,'Tequila', 20, 'Alcoólicos','Tequila','' ,'Disponível');
+INSERT INTO cardapio VALUES (5,'Tropical de Limão', 16, 'Não Alcoólicos','Tropical de Limão','' ,'Disponível');
+INSERT INTO cardapio VALUES (6,'Pinãcolada', 26, 'Não Alcoólicos','Pinãcolada','' ,'Disponível');
+INSERT INTO cardapio VALUES (7,'Suco De Laranja', 10, 'Não Alcoólicos','Suco De Laranja','' ,'Disponível');
+INSERT INTO cardapio VALUES (8,'Água', 8, 'Não Alcoólicos','Água','' ,'Disponível');
+INSERT INTO cardapio VALUES (9,'Batata Frita', 28, 'Petiscos','Batata Frita','' ,'Disponível');
+INSERT INTO cardapio VALUES (10,'Tiras De Frango', 32, 'Petiscos','Tiras De Frango','' ,'Disponível');
+INSERT INTO cardapio VALUES (11,'Coxinha', 23, 'Petiscos','Coxinha','' ,'Disponível');
+INSERT INTO cardapio VALUES (12,'Bolinho De Bacalhau', 15, 'Petiscos','Bolinho De Bacalhau','' ,'Disponível');
